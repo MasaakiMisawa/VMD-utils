@@ -41,6 +41,10 @@ set pset on
 ## Example: chview -com "name O H"                                       ##
 ##   --- fit center of mass of oxygen and hydrogen to center of view     ##
 ##                                                                       ##
+## Memo: Input lattice constant is required                              ##
+##       ("pbc set {$a $b $c $alpha $beta $gamma} -all" on Tk Console)   ##
+##       Only for orthorhombic cell                                      ##
+##                                                                       ##
 ###########################################################################
 ## B. topdb: Export Selected Frames and Atoms as a PDB Trajectory File   ##
 ##                                                                       ##
@@ -63,6 +67,10 @@ set pset on
 ##  pickconfig $frame $filename                                          ##
 ##    $frame: default frame is "now"                                     ##
 ##    $filename: default filename is "Config.dat"                        ##
+##                                                                       ##
+## Memo: Input lattice constant is required                              ##
+##       ("pbc set {$a $b $c $alpha $beta $gamma} -all" on Tk Console)   ##
+##       Only for orthorhombic cell                                      ##
 ##                                                                       ##
 ###########################################################################
 ## D. ssr: Render Snapshots of Selected Frames                           ##
@@ -101,7 +109,28 @@ set pset on
 ##        (please execute "readbonds" with "-pbc" option                 ##
 ##         when you apply a bondlist created with this option)           ##
 ##                                                                       ##
-##  note: cutoff distance should be less than 2.5 ang.                   ##
+##  note: cutoff distance should be less than 3.0 ang.                   ##
+##                                                                       ##
+##  bondlist format:                                                     ##
+##  ---------------------                                                ##
+##  3 5 10     #neighbors of atom 1, step 0                              ##
+##             #neighbors of atom 2, step 0 (if no neighbors: empty)     ##
+##  1 12 100   #neighbors of atom 3, step 0                              ##
+##   .                                                                   ##
+##   .                                                                   ##
+##   .                                                                   ## 
+##  30 40 50   #neighbors of atom n, step 0                              ##
+##  3 5 10 12  #neighbors of atom 1, step 1                              ##
+##  3          #neighbors of atom 1, step 1                              ##
+##   .                                                                   ##
+##   .                                                                   ##
+##   .                                                                   ##
+##                                                                       ##
+## Memo: Input lattice constant is required                              ##
+##       ("pbc set {$a $b $c $alpha $beta $gamma} -all" on Tk Console)   ##
+##       Only for orthorhombic cell                                      ##
+##       VMD will be stoped if there are too many atoms or frames        ##
+##       Create bondlists on other workspace (not on VMD) is recommended ##
 ##                                                                       ##
 ###########################################################################
 ##  F. readbonds: Read Bondlist and Update Every Frames                  ##
@@ -135,6 +164,10 @@ set pset on
 ##   .                                                                   ##
 ##   .                                                                   ##
 ##   .                                                                   ##
+##                                                                       ##
+## Memo: Input lattice constant is required                              ##
+##       ("pbc set {$a $b $c $alpha $beta $gamma} -all" on Tk Console)   ##
+##       Only for orthorhombic cell                                      ##
 ##                                                                       ##
 ###########################################################################
 ##  G. readdata: Read Trajectory Value as "User" Variable                ##
@@ -661,19 +694,19 @@ proc makebonds {args} {
         set lx [molinfo top get a frame $f] 
         set ly [molinfo top get b frame $f] 
         set lz [molinfo top get c frame $f]
-        if {$xi < 2.5} then {
+        if {$xi < 3.0} then {
           set jadx 1
-        } elseif {[expr abs($xi - $lx)] < 2.5} then {
+        } elseif {[expr abs($xi - $lx)] < 3.0} then {
           set jadx -1
         } 
-        if {$yi < 2.5} then {
+        if {$yi < 3.0} then {
           set jady 1
-        } elseif {[expr abs($yi - $ly)] < 2.5} then {
+        } elseif {[expr abs($yi - $ly)] < 3.0} then {
           set jady -1
         } 
-        if {$zi < 2.5} then {
+        if {$zi < 3.0} then {
           set jadz 1
-        } elseif {[expr abs($zi - $lz)] < 2.5} then {
+        } elseif {[expr abs($zi - $lz)] < 3.0} then {
           set jadz -1
         }
         set jad [expr abs($jadx) + abs($jady) + abs($jadz) ]
@@ -810,7 +843,7 @@ proc readbonds {args} {
           #  set jad 1
           #}
           #if {$jad == 1} then {}
-          if {[measure bond "$i $j" frame $f] > 2.5} then {
+          if {[measure bond "$i $j" frame $f] > 3.0} then {
             lset blist($f) $i $ii $i
           } 
         }

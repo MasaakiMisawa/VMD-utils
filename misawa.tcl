@@ -19,7 +19,7 @@ set pset on
 ## 2. Execute "source (path)/misawa.tcl"                                 ##
 ##                                                                       ##
 ## 3. Execute functions                                                  ##
-##                                                                       ##
+##                                                                       ##  
 ###########################################################################
 ## A. chview: Change Viewpoint by Moving Atomic Configurations           ##
 ##                                                                       ##
@@ -41,8 +41,6 @@ set pset on
 ## Example: chview -com "name O H"                                       ##
 ##   --- fit center of mass of oxygen and hydrogen to center of view     ##
 ##                                                                       ##
-## Memo: Only for orthorhombic cell (2015.12.31)                         ##
-##                                                                       ##
 ###########################################################################
 ## B. topdb: Export Selected Frames and Atoms as a PDB Trajectory File   ##
 ##                                                                       ##
@@ -56,17 +54,15 @@ set pset on
 ##    $selsction: selection of atoms (like as "name Fe O")               ##
 ##    $sk: skip frames                                                   ##
 ##                                                                       ##
-## Example: topdb 0 100 trajectory.pdb -skip 1 -sel "name Fe"            ##
+## Example: topdb -skip 5 0 100 trajectory.pdb                           ##
 ##                                                                       ##
 ###########################################################################
 ## C. pickconfig: Export Selected Frame as a Scaled Coordination File    ##
 ##                                                                       ##
 ## (How to use)                                                          ##
 ##  pickconfig $frame $filename                                          ##
-##    $frame: default = "now"                                            ##
+##    $frame: default frame is "now"                                     ##
 ##    $filename: default filename is "Config.dat"                        ##
-##                                                                       ##
-## Memo: Only for orthorhombic cell (2015.12.31)                         ##
 ##                                                                       ##
 ###########################################################################
 ## D. ssr: Render Snapshots of Selected Frames                           ##
@@ -105,28 +101,7 @@ set pset on
 ##        (please execute "readbonds" with "-pbc" option                 ##
 ##         when you apply a bondlist created with this option)           ##
 ##                                                                       ##
-## Memo: Cutoff distance should be less than 3.0 ang.                    ##
-##       VMD will be stopped when there are too much atoms & frames.     ##
-##       Only for orthorhombic cell.                                     ##
-##                                                                       ##
-##      --From the above,                                                ## 
-##       create bondlists on other workspace (not on VMD) is recommended.##
-##                                                                       ##
-##                                                                       ##
-##  bondlist format:                                                     ##
-##  ---------------------                                                ##
-##  3 5 10     #neighbors of atom 1, step 0                              ##
-##             #neighbors of atom 2, step 0 (if no neighbors: empty)     ##
-##  1 12 100   #neighbors of atom 3, step 0                              ##
-##   .                                                                   ##
-##   .                                                                   ##
-##   .                                                                   ## 
-##  30 40 50   #neighbors of atom n, step 0                              ##
-##  3 5 10 12  #neighbors of atom 1, step 1                              ##
-##  3          #neighbors of atom 1, step 1                              ##
-##   .                                                                   ##
-##   .                                                                   ##
-##   .                                                                   ##
+##  note: cutoff distance should be less than 2.5 ang.                   ##
 ##                                                                       ##
 ###########################################################################
 ##  F. readbonds: Read Bondlist and Update Every Frames                  ##
@@ -686,19 +661,19 @@ proc makebonds {args} {
         set lx [molinfo top get a frame $f] 
         set ly [molinfo top get b frame $f] 
         set lz [molinfo top get c frame $f]
-        if {$xi < 3.0} then {
+        if {$xi < 2.5} then {
           set jadx 1
-        } elseif {[expr abs($xi - $lx)] < 3.0} then {
+        } elseif {[expr abs($xi - $lx)] < 2.5} then {
           set jadx -1
         } 
         if {$yi < 2.5} then {
           set jady 1
-        } elseif {[expr abs($yi - $ly)] < 3.0} then {
+        } elseif {[expr abs($yi - $ly)] < 2.5} then {
           set jady -1
         } 
         if {$zi < 2.5} then {
           set jadz 1
-        } elseif {[expr abs($zi - $lz)] < 3.0} then {
+        } elseif {[expr abs($zi - $lz)] < 2.5} then {
           set jadz -1
         }
         set jad [expr abs($jadx) + abs($jady) + abs($jadz) ]
@@ -835,7 +810,7 @@ proc readbonds {args} {
           #  set jad 1
           #}
           #if {$jad == 1} then {}
-          if {[measure bond "$i $j" frame $f] > 3.0} then {
+          if {[measure bond "$i $j" frame $f] > 2.5} then {
             lset blist($f) $i $ii $i
           } 
         }

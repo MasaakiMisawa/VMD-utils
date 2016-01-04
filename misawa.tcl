@@ -129,7 +129,7 @@ set pset on
 ## Memo: Input lattice constant is required                              ##
 ##       ("pbc set {$a $b $c $alpha $beta $gamma} -all" on Tk Console)   ##
 ##       Only for orthorhombic cell                                      ##
-##       VMD will be stoped if there are too many atoms or frames        ##
+##       VMD will be stop if there are too many atoms or frames          ##
 ##       Create bondlists on other workspace (not on VMD) is recommended ##
 ##                                                                       ##
 ###########################################################################

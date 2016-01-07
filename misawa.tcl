@@ -208,7 +208,7 @@ set pset on
 ##   filename: qm_eigv.d.***** (raw data of pwp)                         ##
 ##                                                                       ##
 ##  Memo:                                                                ##
-##   Lattice parameters are requires                                     ##
+##   Lattice parameters are required                                     ##
 ##                                                                       ##
 ###########################################################################
 

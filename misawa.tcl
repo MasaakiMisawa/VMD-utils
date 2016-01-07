@@ -10,6 +10,7 @@ set pset on
 ##  E. makebonds: Make Bondlists for All Frames                          ##
 ##  F. readbonds: Read Bondlist and Update Every Frames                  ##
 ##  G. readdata: Read Trajectory Value as "User" Variable                ##
+##  H. readeigv: Read Eienvalue as Volmetric Data Set                    ##
 ##                                                                       ##
 ###########################################################################
 ## Setup                                                                 ##
@@ -197,6 +198,17 @@ set pset on
 ##   .                                                                   ##
 ##   .                                                                   ##
 ##   .                                                                   ##
+##                                                                       ##
+###########################################################################
+## H. readeigv: Read Eienvalue as Volmetric Data Set                     ##
+##                                                                       ##
+## (How to use)                                                          ##
+##                                                                       ##
+##  readeigv (filename)                                                  ##
+##   filename: qm_eigv.d.***** (raw data of pwp)                         ##
+##                                                                       ##
+##  Memo:                                                                ##
+##   Lattice parameters are requires                                     ##
 ##                                                                       ##
 ###########################################################################
 
@@ -914,6 +926,45 @@ proc readdata {args} {
           }
     }
   }
+}
+###################################################################
+
+puts "readeigv"
+proc readeigv {args} {
+  set filename $args
+  set molid top
+
+  set rfile [open $filename r]
+  set vorigin [gets $rfile]
+  set vgrid [gets $rfile]
+  set ngrid [expr [lindex $vgrid 0]*[lindex $vgrid 1]*[lindex $vgrid 2]]
+  set evfact [gets $rfile]
+  set valList ""
+  set xVec [molinfo top get a]
+  lappend xVec 0
+  lappend xVec 0
+  set yVec 0
+  lappend yVec [molinfo top get b]
+  lappend yVec 0 
+  set zVec 0
+  lappend zVec 0 
+  lappend zVec [molinfo top get c]
+
+  for {set j 0} {$j < $ngrid} {incr j} {
+    set n [gets $rfile]
+    set eval [gets $rfile]
+    for {set i 0} {$i < $n} {incr i} {
+#      lappend valList [expr $eval*$evfact]
+      lappend valList $eval
+    }
+    incr j [expr $n - 1]
+  }
+
+  puts "reading process completed"
+  close $rfile
+#  puts "mol volume $molid $filename [list $vorigin] [list $xVec] [list $yVec] [list $zVec] [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] valList"
+  mol volume $molid $filename $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] [vecscale $evfact $valList]
+#  mol volume $molid $filename $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] $valList
 }
 
 ###################################################################

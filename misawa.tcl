@@ -1023,15 +1023,15 @@ proc readeigv2 {args} {
     lappend vorigin [expr [lindex $shorigin 1]*[molinfo top get b]/[lindex $ovgrid 1]]
     lappend vorigin [expr [lindex $shorigin 2]*[molinfo top get c]/[lindex $ovgrid 2]]
 
-    set xVec [expr $lgx*[molinfo top get a]]
+    set xVec [expr $lgx*[molinfo top get a]/[lindex $ovgrid 0]]
     lappend xVec 0
     lappend xVec 0
     set yVec 0
-    lappend yVec [expr $lgy*[molinfo top get b]]
+    lappend yVec [expr $lgy*[molinfo top get b]/[lindex $ovgrid 1]]
     lappend yVec 0
     set zVec 0
     lappend zVec 0
-    lappend zVec [expr $lgz*[molinfo top get c]]
+    lappend zVec [expr $lgz*[molinfo top get c]/[lindex $ovgrid 2]]
 
     set vgrid $lgx
     lappend vgrid $lgy
@@ -1065,7 +1065,6 @@ proc readeigv2 {args} {
     puts "accepted as $vdnam"
   }
 }
-
 ###################################################################
 ###################################################################
 puts "-------------------"

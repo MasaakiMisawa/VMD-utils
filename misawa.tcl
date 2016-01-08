@@ -1,6 +1,6 @@
 set pset on
 ###########################################################################
-## VMD Tools (2015.12.31)                                                ##
+## VMD Tools (2016.1.8)                                                  ##
 ##                                                                       ##
 ## -Functions-                                                           ##
 ##  A. chview: Change Viewpoint by Moving Atomic Configurations          ##
@@ -205,10 +205,20 @@ set pset on
 ## (How to use)                                                          ##
 ##                                                                       ##
 ##  readeigv (filename)                                                  ##
-##   filename: qm_eigv.d.***** (raw data of pwp)                         ##
+##   --- filename: qm_eigv.d.***** (raw data from pwp)                   ##
+##                                                                       ##
+##  read eigv (filename) (filename2)                                     ##
+##   --- read 2 files                                                    ##
+##                                                                       ##
+##  read eigv (filename) as (dataname)                                   ##
+##   --- input data as name of (dataname)                                ##
+##                                                                       ##
+## (example)                                                             ##
+##  read eigv qm_eigv.d.5.00000 as HOMO qm_eigv.d.7.00000 as "LUMO 2"    ##
 ##                                                                       ##
 ##  Memo:                                                                ##
 ##   Lattice parameters are required                                     ##
+##   Only for orthorhombic cell                                          ##
 ##                                                                       ##
 ###########################################################################
 
@@ -235,6 +245,8 @@ if {$pset == "on"} then {
   color Labels Bonds black
 }
 
+puts ""
+puts "---FUNCTION LIST---"
 ###########################################################################
 
 puts "chview"
@@ -931,43 +943,52 @@ proc readdata {args} {
 
 puts "readeigv"
 proc readeigv {args} {
-  set filename $args
   set molid top
+  set nargs [llength $args]
 
-  set rfile [open $filename r]
-  set vorigin [gets $rfile]
-  set vgrid [gets $rfile]
-  set ngrid [expr [lindex $vgrid 0]*[lindex $vgrid 1]*[lindex $vgrid 2]]
-  set evfact [gets $rfile]
-  set valList ""
-  set xVec [molinfo top get a]
-  lappend xVec 0
-  lappend xVec 0
-  set yVec 0
-  lappend yVec [molinfo top get b]
-  lappend yVec 0 
-  set zVec 0
-  lappend zVec 0 
-  lappend zVec [molinfo top get c]
-
-  for {set j 0} {$j < $ngrid} {incr j} {
-    set n [gets $rfile]
-    set eval [gets $rfile]
-    for {set i 0} {$i < $n} {incr i} {
-#      lappend valList [expr $eval*$evfact]
-      lappend valList $eval
+  for {set ii 0} {$ii < $nargs} {incr ii} {
+    set filename($ii) [lindex $args $ii]
+    set rfile [open $filename($ii) r]
+    set vorigin [gets $rfile]
+    set vgrid [gets $rfile]
+    set ngrid [expr [lindex $vgrid 0]*[lindex $vgrid 1]*[lindex $vgrid 2]]
+    set evfact [gets $rfile]
+    set valList ""
+    set xVec [molinfo top get a]
+    lappend xVec 0
+    lappend xVec 0
+    set yVec 0
+    lappend yVec [molinfo top get b]
+    lappend yVec 0 
+    set zVec 0
+    lappend zVec 0 
+    lappend zVec [molinfo top get c]
+    
+    puts "start readig $filename($ii)"  
+    for {set j 0} {$j < $ngrid} {incr j} {
+      set n [gets $rfile]
+      set eval [gets $rfile]
+      for {set i 0} {$i < $n} {incr i} {
+        lappend valList [expr $eval*$evfact]
+#        lappend valList $eval
+      }
+      incr j [expr $n - 1]
     }
-    incr j [expr $n - 1]
-  }
 
-  puts "reading process completed"
-  close $rfile
-#  puts "mol volume $molid $filename [list $vorigin] [list $xVec] [list $yVec] [list $zVec] [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] valList"
-  mol volume $molid $filename $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] [vecscale $evfact $valList]
-#  mol volume $molid $filename $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] $valList
+    puts "end reading $filename($ii)"
+    close $rfile
+    if {[lindex $args [expr $ii + 1]] == "as"} then {
+      set vdnam [lindex $args [expr $ii + 2]]
+      incr ii 2
+    } else {
+      set vdnam $filename($ii)
+    }
+    mol volume $molid $vdnam $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] $valList
+    # mol volume $molid $filename($ii) $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] [vecscale $evfact $valList]
+    puts "accepted as $vdnam"
+  }
 }
 
 ###################################################################
 ###################################################################
-puts "   "
-puts "complete"
+puts "-------------------"

@@ -247,10 +247,10 @@ if {$pset == "on"} then {
 }
 
 puts ""
-puts "---FUNCTION LIST---"
+# puts "---FUNCTION LIST---"
 ###########################################################################
 
-puts "chview"
+# puts "chview"
 proc chview {args} {
   global defcx
   global defcy
@@ -457,7 +457,7 @@ set defcy 0
 set defcz 0
 ####################################################################
 
-puts "topdb"
+# puts "topdb"
 proc topdb {args} {
   set start 0
   set end 0
@@ -502,7 +502,7 @@ proc topdb {args} {
 }
 ####################################################################
 
-puts "pickconfig"
+# puts "pickconfig"
 proc pickconfig {args} {
   set nframe [lindex $args 0] 
   set filen [lindex $args 1]
@@ -545,7 +545,7 @@ proc pickconfig {args} {
 }
 ####################################################################
 
-puts "ssr"
+# puts "ssr"
 proc ssr {args} {
   set nargs [llength $args]
   set format tga
@@ -640,7 +640,7 @@ return
 
 ###################################################################
 
-puts "makebonds"
+# puts "makebonds"
 proc makebonds {args} {
   set swpbc 0
   if {[llength $args] == 1} then {
@@ -821,7 +821,7 @@ proc makebonds {args} {
 }
 ###################################################################
 
-puts "readbonds"
+# puts "readbonds"
 proc readbonds {args} {
   global blist
   set swcheck 0
@@ -903,7 +903,7 @@ proc bupdate { name element op } {
 
 ###################################################################
 
-puts "readdata"
+# puts "readdata"
 proc readdata {args} {
   set var user
   set ini 4 
@@ -942,7 +942,7 @@ proc readdata {args} {
 }
 ###################################################################
 
-puts "readeigv"
+# puts "readeigv"
 proc readeigv {args} {
   set molid top
   set nargs [llength $args]
@@ -953,7 +953,9 @@ proc readeigv {args} {
     set vorigin [gets $rfile]
     set vgrid [gets $rfile]
     set ngrid [expr [lindex $vgrid 0]*[lindex $vgrid 1]*[lindex $vgrid 2]]
-    set evfact [gets $rfile]
+#    set evfact [gets $rfile]
+    set evfact [format "%.7f" [gets $rfile]]
+    puts $evfact
     set valList ""
     set xVec [molinfo top get a]
     lappend xVec 0
@@ -971,12 +973,11 @@ proc readeigv {args} {
       set n [gets $rfile]
       set eval [gets $rfile]
       for {set i 0} {$i < $n} {incr i} {
-#        lappend valList [expr $eval*$evfact]
-#        lappend valList $eval
-        lappend valList [format "%.6f" [expr $eval*$evfact]]
+        lappend valList $eval
+#        lappend valList [format "%.6f" [expr $eval*$evfact]]
       }
       incr j [expr $n - 1]
-      set nn [expr $nn + $n]
+#      set nn [expr $nn + $n]
     }
 
 #    puts "ngrid = $ngrid value = $nn"
@@ -988,8 +989,8 @@ proc readeigv {args} {
     } else {
       set vdnam $filename($ii)
     }
-    mol volume $molid $vdnam $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] $valList
-    # mol volume $molid $filename($ii) $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] [vecscale $evfact $valList]
+    #mol volume $molid $vdnam $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] $valList
+    mol volume $molid $vdnam $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] [vecscale $evfact $valList]
     puts "accepted as $vdnam"
   }
 }
@@ -1008,14 +1009,16 @@ proc readeigv2 {args} {
     set ovorigin [gets $rfile]
     set ovgrid [gets $rfile]
     set shorigin [gets $rfile]
-    set evfact [gets $rfile]
+#    set evfact [gets $rfile]
+    set evfact [format "%.7f" [gets $rfile]]
+    puts $evfact
     set valList ""
     
     set lgx [lindex $shorigin 3]
     set lgy [lindex $shorigin 4]
     set lgz [lindex $shorigin 5]
 
-    puts "$lgx $lgy $lgz"
+#    puts "$lgx $lgy $lgz"
 
     set vorigin [expr [lindex $shorigin 0]*[molinfo top get a]/[lindex $ovgrid 0]]
     lappend vorigin [expr [lindex $shorigin 1]*[molinfo top get b]/[lindex $ovgrid 1]]
@@ -1042,9 +1045,8 @@ proc readeigv2 {args} {
       set n [gets $rfile]
       set eval [gets $rfile]
       for {set i 0} {$i < $n} {incr i} {
-#        lappend valList [expr $eval*$evfact]
-#        lappend valList $eval
-        lappend valList [format "%.6f" [expr $eval*$evfact]]
+        lappend valList $eval
+#        lappend valList [format "%.6f" [expr $eval*$evfact]]
       }
       incr j [expr $n - 1]
 #      set nn [expr $nn + $n]
@@ -1059,8 +1061,8 @@ proc readeigv2 {args} {
     } else {
       set vdnam $filename($ii)
     }
-    mol volume $molid $vdnam $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] $valList
-    # mol volume $molid $filename($ii) $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] [vecscale $evfact $valList]
+    #mol volume $molid $vdnam $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] $valList
+     mol volume $molid $vdnam $vorigin $xVec $yVec $zVec [lindex $vgrid 0] [lindex $vgrid 1] [lindex $vgrid 2] [vecscale $evfact $valList]
     puts "accepted as $vdnam"
   }
 }
@@ -1283,24 +1285,40 @@ proc howto {arg} {
     puts "##                                                                       ##"
     puts "###########################################################################" 
   } else {
-    puts "###########################################################################"
-    puts "## VMD Tools (2016.1.8)                                                  ##"
-    puts "##                                                                       ##"
-    puts "## -Functions-                                                           ##"
-    puts "##  A. chview: Change Viewpoint by Moving Atomic Configurations          ##"
-    puts "##  B. topdb: Export Selected Frames and Atoms as PDB a Trajectory File  ##"
-    puts "##  C. pickconfig: Export Selected Frames as a Scaled Coordination File  ##"
-    puts "##  D. ssr: Render Snapshots of Selected Frames                          ##"
-    puts "##  E. makebonds: Make Bondlists for All Frames                          ##"
-    puts "##  F. readbonds: Read Bondlist and Update Every Frames                  ##"
-    puts "##  G. readdata: Read Trajectory Value as \"User\" Variable                ##"
-    puts "##  H. readeigv: Read Eienvalue as Volmetric Data Set                    ##"
-    puts "##                                                                       ##"
+    puts "error: select function name"
+    puts ""
+    puts " -Functions-"
+    puts "  chview"
+    puts "  topdb"
+    puts "  pickconfig"
+    puts "  ssr"
+    puts "  makebonds"
+    puts "  readbonds"
+    puts "  readdata"
+    puts "  readeigv"
+    puts "                                                                       ##"
+    puts "##    Execute \"howto (function name)\" to show how to use the function    ##"
     puts "###########################################################################"
   }
 }
 
 #######################################################################
 #######################################################################
-puts "-------------------"
-puts "How to Use: \"howto (function name)\""
+
+# puts "-------------------"
+# puts "How to Use: \"howto (function name)\""
+puts "###########################################################################"
+puts "## VMD Tools (2016.1.8)                                                  ##"
+puts "##                                                                       ##"
+puts "## -Functions-                                                           ##"
+puts "##  A. chview: Change Viewpoint by Moving Atomic Configurations          ##"
+puts "##  B. topdb: Export Selected Frames and Atoms as PDB a Trajectory File  ##"
+puts "##  C. pickconfig: Export Selected Frames as a Scaled Coordination File  ##"
+puts "##  D. ssr: Render Snapshots of Selected Frames                          ##"
+puts "##  E. makebonds: Make Bondlists for All Frames                          ##"
+puts "##  F. readbonds: Read Bondlist and Update Every Frames                  ##"
+puts "##  G. readdata: Read Trajectory Value as \"User\" Variable                ##"
+puts "##  H. readeigv: Read Eienvalue as Volmetric Data Set                    ##"
+puts "##                                                                       ##"
+puts "##    Execute \"howto (function name)\" to show how to use the function    ##"
+puts "###########################################################################"

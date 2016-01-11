@@ -15,11 +15,13 @@ set pset on
 ###########################################################################
 ## Setup                                                                 ##
 ##                                                                       ##
-## 1. Select "VMD Main -> Extansions -> TkConsole"                       ##
+## 1. Load atomic configuration file                                     ##
 ##                                                                       ##
-## 2. Execute "source (path)/misawa.tcl"                                 ##
+## 2. Select "VMD Main -> Extansions -> TkConsole"                       ##
 ##                                                                       ##
-## 3. Execute functions                                                  ##
+## 3. Execute "source (path)/misawa.tcl"                                 ##
+##                                                                       ##
+## 4. Execute functions                                                  ##
 ##                                                                       ##  
 ###########################################################################
 ## A. chview: Change Viewpoint by Moving Atomic Configurations           ##
@@ -856,18 +858,18 @@ proc readbonds {args} {
       if {$swcheck == 1} then {
         for {set ii 0} {$ii < [llength [lindex $blist($f) $i]]} {incr ii} {
           set j [lindex $blist($f) $i $ii]
-          #set jad 0
-          #set dx [expr abs([[atomselect top "index $i"] get x] - [[atomselect top "index $j"] get x])]
-          #set dy [expr abs([[atomselect top "index $i"] get y] - [[atomselect top "index $j"] get y])]
-          #set dz [expr abs([[atomselect top "index $i"] get z] - [[atomselect top "index $j"] get z])]
-          #if {$dx > [expr $lx/2.0]} then {
-          #  set jad 1
-          #} elseif {$dy > [expr $ly/2.0]} then {
-          #  set jad 1
-          #} elseif {$dz > [expr $lz/2.0]} then {
-          #  set jad 1
-          #}
-          #if {$jad == 1} then {}
+          # set jad 0
+          # set dx [expr abs([[atomselect top "index $i"] get x] - [[atomselect top "index $j"] get x])]
+          # set dy [expr abs([[atomselect top "index $i"] get y] - [[atomselect top "index $j"] get y])]
+          # set dz [expr abs([[atomselect top "index $i"] get z] - [[atomselect top "index $j"] get z])]
+          # if {$dx > [expr $lx/2.0]} then {
+          #   set jad 1
+          # } elseif {$dy > [expr $ly/2.0]} then {
+          #   set jad 1
+          # } elseif {$dz > [expr $lz/2.0]} then {
+          #   set jad 1
+          # }
+          # if {$jad == 1} then {}
           if {[measure bond "$i $j" frame $f] > 3.0} then {
             lset blist($f) $i $ii $i
           } 
@@ -951,6 +953,10 @@ proc readeigv {args} {
     set filename($ii) [lindex $args $ii]
     set rfile [open $filename($ii) r]
     set vorigin [gets $rfile]
+    if {[lindex $vorigin 0] == -1} then {
+    vmdcon -warn "readeigv: file format error"
+    return
+    }
     set vgrid [gets $rfile]
     set ngrid [expr [lindex $vgrid 0]*[lindex $vgrid 1]*[lindex $vgrid 2]]
 #    set evfact [gets $rfile]
@@ -1003,9 +1009,12 @@ proc readeigv2 {args} {
     set filename($ii) [lindex $args $ii]
     set rfile [open $filename($ii) r]
     set dummy [gets $rfile]
+
     if {[lindex $dummy 0] == 0} then {
-    puts "Use readeigv!"
+    vmdcon -warn "readeigv2: file format error"
+    return
     }
+
     set ovorigin [gets $rfile]
     set ovgrid [gets $rfile]
     set shorigin [gets $rfile]
@@ -1067,6 +1076,7 @@ proc readeigv2 {args} {
   }
 }
 #######################################################################
+
 proc howto {arg} {
   if {$arg == "chview"} then {
     puts "###########################################################################"
@@ -1296,9 +1306,7 @@ proc howto {arg} {
     puts "  readbonds"
     puts "  readdata"
     puts "  readeigv"
-    puts "                                                                       ##"
-    puts "##    Execute \"howto (function name)\" to show how to use the function    ##"
-    puts "###########################################################################"
+    puts ""
   }
 }
 

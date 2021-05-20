@@ -43,8 +43,8 @@ if {$pset == "on"} then {
   #pbc box
 
 ### Representations ###
-  mol modstyle 0 top VDW 0.20 12.00 
-  mol modcolor 0 top Element
+  #mol modstyle 0 top VDW 0.20 12.00 
+  #mol modcolor 0 top Element
   #mol addrep top
   #mol modstyle 2 top DynamicBonds 2.30 0.10 12.00
   #mol addrep top
@@ -53,14 +53,14 @@ if {$pset == "on"} then {
 
 ### U --> H conversion settings ###
 ### if U atoms exist, it will considered as H ###
-  set indH [[atomselect top "element Z or type Z or name Z"] get index]
-  if {$indH != ""} then {
-    set selH [atomselect top "index $indH"]
-    $selH set name H
-    $selH set type H
-    $selH set element H
-    $selH set radius 1
-  }
+#  set indH [[atomselect top "element Z or type Z or name Z"] get index]
+#  if {$indH != ""} then {
+#    set selH [atomselect top "index $indH"]
+#    $selH set name H
+#    $selH set type H
+#    $selH set element H
+#    $selH set radius 1
+#  }
 
 ### Other Settings ###
   animate goto 0

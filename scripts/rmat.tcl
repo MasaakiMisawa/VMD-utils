@@ -93,8 +93,8 @@ lappend zxm "1 0 0 0"
 lappend zxm "0 -1 0 0"
 lappend zxm "0 0 1 0"
 lappend zxm "0 0 0 1"
-set dlta [molinfo top get a]
-set dltb [molinfo top get b]
-set dltc [molinfo top get c]
-set sela [atomselect top all]
-set pi [expr acos(-1.0)]
+#set dlta [molinfo top get a]
+#set dltb [molinfo top get b]
+#set dltc [molinfo top get c]
+#set sela [atomselect top all]
+#set pi [expr acos(-1.0)]

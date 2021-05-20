@@ -18,8 +18,8 @@
 ##           $r = 0: Snapshots                                           ##
 ##           $r = 1: Internal Tachyon                                    ##
 ##           $r = 2: POV-Ray                                             ##
-##    -ope: rendering with camera operation                              ##
 ##    -cons: output file name will be consecutive (default: 0)           ##
+##    -ope: rendering with camera operation                              ##
 ##                                                                       ##
 ##    opefile format:                                                    ##
 ##    -----------------------------------                                ##

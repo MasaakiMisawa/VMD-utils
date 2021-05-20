@@ -20,7 +20,9 @@
 ###########################################################################
 ## Setup                                                                 ##
 ##                                                                       ##
-## 1. Load atomic configuration file                                     ##
+## 0. Download VMD-utils                                                 ##
+##                                                                       ##
+## 1. Load atomic configuration file in VMD                              ##
 ##                                                                       ##
 ## 2. Select "VMD Main -> Extansions -> TkConsole"                       ##
 ##                                                                       ##
@@ -28,13 +30,17 @@
 ##                                                                       ##
 ## 4. Execute functions                                                  ##
 ##                                                                       ##
+## You can read brief description of each function with                  ##
+##   "howto {function name}"                                             ##
+## on Tk console                                                         ##                             
+##                                                                       ##
 ###########################################################################
 
 set script_name [ info script ] 
 set dir_name    [ file dirname $script_name ]
 
-#source $dir_name/scripts/display_settings.tcl
-#source $dir_name/scripts/color_palette.tcl
+source $dir_name/scripts/display_settings.tcl
+source $dir_name/scripts/color_palette.tcl
 source $dir_name/scripts/chview.tcl
 source $dir_name/scripts/topdb.tcl
 source $dir_name/scripts/pickconfig.tcl

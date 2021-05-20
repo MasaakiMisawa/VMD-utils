@@ -8,6 +8,7 @@
 ##  Memo:                                                                ##
 ##   Lattice parameters are required                                     ##
 ##   Only for orthorhombic cell (?)                                      ##
+##   Eigenvalue file in QXMD code is only available                      ##
 ##                                                                       ##
 ###########################################################################
 

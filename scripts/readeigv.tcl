@@ -19,6 +19,7 @@
 ##   Lattice parameters are required                                     ##
 ##   Only for orthorhombic cell (?)                                      ##
 ##   New format: readeigv2 (2016.1.8)                                    ##
+##   Eigenvalue file in QXMD code is only available                      ##
 ##                                                                       ##
 ###########################################################################
 

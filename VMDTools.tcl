@@ -33,22 +33,22 @@
 set script_name [ info script ] 
 set dir_name    [ file dirname $script_name ]
 
-source $dir_name/display_settings.tcl
-source $dir_name/chview.tcl
-source $dir_name/topdb.tcl
-source $dir_name/pickconfig.tcl
-source $dir_name/ssr.tcl
-source $dir_name/makebonds.tcl
-source $dir_name/readbonds.tcl
-source $dir_name/readdata.tcl
-source $dir_name/readeigv.tcl
-source $dir_name/readeigvs.tcl
-source $dir_name/cntr.tcl
-source $dir_name/rmat.tcl
-source $dir_name/darrow.tcl
-source $dir_name/getinside.tcl
-source $dir_name/pbcmove.tcl
-source $dir_name/color_palette.tcl
+#source $dir_name/scripts/display_settings.tcl
+#source $dir_name/scripts/color_palette.tcl
+source $dir_name/scripts/chview.tcl
+source $dir_name/scripts/topdb.tcl
+source $dir_name/scripts/pickconfig.tcl
+source $dir_name/scripts/ssr.tcl
+source $dir_name/scripts/makebonds.tcl
+source $dir_name/scripts/readbonds.tcl
+source $dir_name/scripts/readdata.tcl
+source $dir_name/scripts/readeigv.tcl
+source $dir_name/scripts/readeigvs.tcl
+source $dir_name/scripts/cntr.tcl
+source $dir_name/scripts/rmat.tcl
+source $dir_name/scripts/darrow.tcl
+source $dir_name/scripts/getinside.tcl
+source $dir_name/scripts/pbcmove.tcl
 
 #######################################################################
 proc howto {arg} {

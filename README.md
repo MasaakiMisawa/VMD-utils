@@ -1,1 +1,1 @@
-# VMD-Tools
+# VMD-utils

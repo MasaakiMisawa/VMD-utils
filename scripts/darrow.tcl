@@ -60,7 +60,7 @@ proc drawar { name element op } {
   draw delete all
   draw color green
   for {set i 0} {$i < $natm($f)} {incr i} {
-    draw cylinder $pos1($f,$i) [vecadd $pos1($f,$i) [vecscale $pos2($f,$i) 2]] radius 0.1
-    draw cone [vecadd $pos1($f,$i) [vecscale $pos2($f,$i) 2]] [vecadd $pos1($f,$i) [vecscale $pos2($f,$i) 2.5]] radius 0.2
+    draw cylinder $pos1($f,$i) [vecadd $pos1($f,$i) [vecscale $pos2($f,$i) 1]] radius 0.1
+    draw cone [vecadd $pos1($f,$i) [vecscale $pos2($f,$i) 1]] [vecadd $pos1($f,$i) [vecscale $pos2($f,$i) 1.4]] radius 0.2
   }
 }
